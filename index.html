@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script defer type="module" src="./index.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="page-container">
+      <header class="header">
+        <h1 class="header-titel">The black box</h1>
+        <input class="search" type="text" placeholder="Zoek Post" />
+        <nav class="navigation">
+          <ul class="links">
+            <li><a href="" class="link new-post">Nieuwe post</a></li>
+            <li><a href="" class="link exit">Exit</a></li>
+          </ul>
+        </nav>
+      </header>
+      <main class="main-container">
+        <ul class="journals-list"></ul>
+        <div class="journal-views">
+          <div class="journal-form-container">
+            <h2 class="form-titel">Niewe post</h2>
+            <form class="journal-new">
+              <input type="text" name="titel" placeholder="Titel" required />
+              <textarea
+                name="content"
+                placeholder="Plaats hier je content ( Markdown of gewone tekst )"
+                required
+              ></textarea>
+              <input type="text" name="tags" placeholder="Tags bv: #fun" />
+              <button>Toevoegen</button>
+            </form>
+          </div>
+          <div class="journal-detail-container hidden">
+            <div class="detail-summary">
+              <p>
+                Titel: <span class="detail-summary-text detail-titel"></span>
+              </p>
+              <p>
+                Datum: <span class="detail-summary-text detail-datum"></span>
+              </p>
+              <p>Tags: <span class="detail-summary-text detail-tags"></span></p>
+            </div>
+            <div class="detail-content"></div>
+            <div class="detail-btns">
+              <button class="edit">Bewerken</button>
+              <button class="delete">Verwijder</button>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer class="footer">
+        Coryright &copy; Ameryckx Ben. All rights reserved
+      </footer>
+    </div>
+  </body>
+</html>
