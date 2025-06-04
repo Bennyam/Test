@@ -20,6 +20,9 @@ const btnDelete = document.querySelector(".delete");
 const btnEdit = document.querySelector(".edit");
 const searchField = document.querySelector(".search");
 
+const ITEMS_PER_PAGINA = 5;
+let currentPage = 1;
+
 function formatDate(date) {
   return new Intl.DateTimeFormat("nl-BE", {
     day: "numeric",
@@ -38,15 +41,21 @@ function viewPostdetails() {
   detailviewContainer.classList.remove("hidden");
 }
 
-function displayJournals(journals) {
+function displayJournals(journals, page = 1) {
   journalView.innerHTML = "";
 
-  if (journals.length === 0) {
+  const totalPages = Math.ceil(journals.length / ITEMS_PER_PAGINA);
+  const start = (page - 1) * ITEMS_PER_PAGINA;
+  const end = start + ITEMS_PER_PAGINA;
+  const visibleJournals = journals.slice(start, end);
+
+  if (visibleJournals.length === 0) {
     journalView.innerHTML = `<li class="journal-empty">Geen dagboekitems gevonden.</li>`;
+    document.querySelector(".pagination").innerHTML = "";
     return;
   }
 
-  journals.forEach(function ({ id, titel, datum, tags }) {
+  visibleJournals.forEach(function ({ id, titel, datum, tags }) {
     const html = `
         <li class="journal" data-id=${id}>
           <h2 class="journal-titel">${titel}</h2>
@@ -56,6 +65,45 @@ function displayJournals(journals) {
         `;
     journalView.insertAdjacentHTML("afterbegin", html);
   });
+
+  viewPaginationControls(totalPages, page);
+}
+
+function viewPaginationControls(totalPages, current) {
+  const paginationEl = document.querySelector(".pagination");
+  paginationEl.innerHTML = "";
+
+  const prevBtn = document.createElement("button");
+  prevBtn.textContent = "Vorige";
+  prevBtn.disabled = currentPage === 1;
+  prevBtn.classList.add("btn-pagination");
+  prevBtn.addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      displayJournals(state.journals, currentPage);
+      const total = Math.ceil(state.journals.length / ITEMS_PER_PAGINA);
+      viewPaginationControls(total, currentPage);
+    }
+  });
+  paginationEl.appendChild(prevBtn);
+
+  const onPage = document.createElement("p");
+  onPage.textContent = currentPage;
+  onPage.classList.add("current-page");
+  paginationEl.appendChild(onPage);
+
+  const nextBtn = document.createElement("button");
+  nextBtn.textContent = "Volgende";
+  nextBtn.disabled = currentPage === totalPages;
+  nextBtn.classList.add("btn-pagination");
+  nextBtn.addEventListener("click", () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+      displayJournals(state.journals, currentPage);
+      viewPaginationControls(totalPages, currentPage);
+    }
+  });
+  paginationEl.appendChild(nextBtn);
 }
 
 function updateDetailsView(journal) {
@@ -70,29 +118,32 @@ function updateDetailsView(journal) {
 }
 
 function initUi() {
-  displayJournals(state.journals);
+  displayJournals(state.journals, currentPage);
 
   if (state.journals.length === 0) {
+    viewNewpostForm();
     detailTitle.textContent = "Geen items beschikbaar";
     detailDatum.textContent = "";
     detailTags.textContent = "";
     detailContent.innerHTML =
       "<p>Je hebt nog geen dagboekitems toegevoegd.</p>";
+  } else {
     viewPostdetails();
-    return;
+    const laatste = state.journals[state.journals.length - 1];
+    updateDetailsView(laatste);
+
+    document
+      .querySelector(`[data-id="${laatste.id}"]`)
+      ?.classList.add("journal-selected");
+    setCurrentId(laatste.id);
   }
 
-  const laatste = state.journals[state.journals.length - 1];
-  updateDetailsView(laatste);
-  setCurrentId(laatste.id);
-  viewPostdetails();
-
-  const laatstToegevoegd = document.querySelector(`[data-id="${laatste.id}"]`);
-  laatstToegevoegd?.classList.add("journal-selected");
+  const totalPages = Math.ceil(state.journals.length / ITEMS_PER_PAGINA);
+  viewPaginationControls(totalPages, currentPage);
 }
 
 function updateUi() {
-  displayJournals(state.journals);
+  displayJournals(state.journals, currentPage);
 }
 
 initUi();

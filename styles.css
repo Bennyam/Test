@@ -78,6 +78,14 @@ body {
   color: var(--grey-dark);
 }
 
+.journals-list-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  gap: 2rem;
+}
+
 .journals-list {
   background-color: #fff;
   border-radius: 1rem;
@@ -85,6 +93,35 @@ body {
   overflow-y: auto;
   border: 4px solid #ddd;
   flex-grow: 1;
+}
+
+.pagination {
+  margin: 0 auto;
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-pagination {
+  min-width: 12rem;
+  padding: 1rem 2rem;
+  font-size: 1.8rem;
+  background-color: var(--color-primary);
+  color: var(--grey-dark);
+  border-radius: 10rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-pagination:disabled {
+  background-color: #ffe788;
+  color: #777;
+  cursor: not-allowed;
+}
+
+.current-page {
+  font-size: 1.8rem;
 }
 
 .journal {
