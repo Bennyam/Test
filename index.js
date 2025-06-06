@@ -41,7 +41,7 @@ function viewPostdetails() {
   detailviewContainer.classList.remove("hidden");
 }
 
-function displayJournals(journals, page = 1) {
+function displayJournals(journals, page) {
   journalView.innerHTML = "";
 
   const totalPages = Math.ceil(journals.length / ITEMS_PER_PAGINA);
@@ -66,10 +66,10 @@ function displayJournals(journals, page = 1) {
     journalView.insertAdjacentHTML("afterbegin", html);
   });
 
-  viewPaginationControls(totalPages, page);
+  viewPaginationControls(totalPages);
 }
 
-function viewPaginationControls(totalPages, current) {
+function viewPaginationControls(totalPages) {
   const paginationEl = document.querySelector(".pagination");
   paginationEl.innerHTML = "";
 
